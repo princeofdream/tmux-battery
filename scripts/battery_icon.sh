@@ -74,24 +74,15 @@ get_icon_settings() {
 	high_charge_icon=$(get_tmux_option "@batt_high_charge_icon" "$high_charge_icon_default")
 	medium_charge_icon=$(get_tmux_option "@batt_medium_charge_icon" "$medium_charge_icon_default")
 	low_charge_icon=$(get_tmux_option "@batt_low_charge_icon" "$low_charge_icon_default")
-	charge_00s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_00s_icondefault")
-	charge_10s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_10s_icondefault")
-	charge_20s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_20s_icondefault")
-	charge_30s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_30s_icondefault")
-	charge_40s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_40s_icondefault")
-	charge_50s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_50s_icondefault")
-	charge_60s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_60s_icondefault")
-	charge_70s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_70s_icondefault")
-	charge_80s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_80s_icondefault")
-	charge_90s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_90s_icondefault")
 }
 
 print_icon() {
 	local status=$1
 	percentage=$($CURRENT_DIR/battery_percentage.sh | sed -e 's/%//')
-	percentage=92
 	if [[ $status =~ (charged) ]]; then
+		generate_charge_icon $((percentage/10))
 		printf "$charged_icon"
+		printf "${charge_icon_val}"
 	elif [[ $status =~ (^charging) ]]; then
 		generate_charge_icon $((percentage/10))
 		printf "$charging_icon"
