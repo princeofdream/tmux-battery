@@ -16,14 +16,46 @@ low_charge_icon=""
 
 charged_default="❇ "
 charged_default_osx="🔋 "
-# charging_default="⚡️ "
-charging_default="|..|"
+charging_default="⚡️"
+# charging_default="|..|"
 # attached_default="⚠️ "
 attached_default="|!!|"
-full_charge_icon_default="||||"
-high_charge_icon_default="|||"
-medium_charge_icon_default="||"
-low_charge_icon_default="|"
+full_charge_icon_default="◼◼◼◼◼◼◼◼◼◼"
+high_charge_icon_default="◼◼◼◼◼◼◼◻◻◻"
+medium_charge_icon_default="◼◼◼◼◼◻◻◻◻◻"
+low_charge_icon_default="◼◻◻◻◻◻◻◻◻◻"
+
+charge_color_map=(d70000 ff5f00 ff8700 ffaf00 ffd700 ffff00 d7ff00 afff00 87ff00 5fff00 )
+charge_icon_val=""
+
+generate_charge_icon ()
+{
+	local charge_util_full="◼"
+	local charge_util_inuse="◻"
+	local charge_util_empty="-"
+	local charge_icon_param=$1
+
+	if [[ ${charge_icon_param}"" == "" ]]; then
+		charge_icon_param=0
+	fi
+	charge_icon_val=""
+
+	icon_count=0;
+	while [[ ${icon_count} -le 9 ]]; do
+		charge_icon_val=${charge_icon_val}"#[fg=#${charge_color_map[$icon_count]}]"
+		if [[ ${icon_count} -lt $charge_icon_param ]]; then
+			charge_icon_val=${charge_icon_val}${charge_util_full}
+		elif [[ ${icon_count} -eq $charge_icon_param ]]; then
+			charge_icon_val=${charge_icon_val}${charge_util_inuse}
+		else
+			charge_icon_val=${charge_icon_val}${charge_util_empty}
+		fi
+		icon_count=$((icon_count + 1))
+	done
+
+	charge_icon_val=${charge_icon_val}"#[fg=#${charge_color_map[$charge_icon_param]}]"
+}	# ----------  end of function generate_charge_icon  ----------
+
 
 charged_default() {
 	if is_osx; then
@@ -42,27 +74,45 @@ get_icon_settings() {
 	high_charge_icon=$(get_tmux_option "@batt_high_charge_icon" "$high_charge_icon_default")
 	medium_charge_icon=$(get_tmux_option "@batt_medium_charge_icon" "$medium_charge_icon_default")
 	low_charge_icon=$(get_tmux_option "@batt_low_charge_icon" "$low_charge_icon_default")
+	charge_00s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_00s_icondefault")
+	charge_10s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_10s_icondefault")
+	charge_20s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_20s_icondefault")
+	charge_30s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_30s_icondefault")
+	charge_40s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_40s_icondefault")
+	charge_50s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_50s_icondefault")
+	charge_60s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_60s_icondefault")
+	charge_70s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_70s_icondefault")
+	charge_80s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_80s_icondefault")
+	charge_90s_icon=$(get_tmux_option "@batt_low_charge_icon" "$charge_90s_icondefault")
 }
 
 print_icon() {
 	local status=$1
+	percentage=$($CURRENT_DIR/battery_percentage.sh | sed -e 's/%//')
+	percentage=92
 	if [[ $status =~ (charged) ]]; then
 		printf "$charged_icon"
 	elif [[ $status =~ (^charging) ]]; then
+		generate_charge_icon $((percentage/10))
 		printf "$charging_icon"
+		printf "${charge_icon_val}"
 	elif [[ $status =~ (^discharging) ]]; then
         # use code from the bg color
-        percentage=$($CURRENT_DIR/battery_percentage.sh | sed -e 's/%//')
         if [ $percentage -eq 100 ]; then
+			generate_charge_icon $((percentage/10))
             printf "$full_charge_icon"
-        elif [ $percentage -le 99 -a $percentage -ge 51 ];then
-            printf "$high_charge_icon"
-        elif [ $percentage -le 50 -a $percentage -ge 16 ];then
-            printf "$medium_charge_icon"
-        elif [ "$percentage" == "" ];then  
+			printf "${charge_icon_val}"
+        elif [ $percentage -le 99 -a $percentage -ge 0 ];then
+            # printf "$charge_90s_icon_default"
+			generate_charge_icon $((percentage/10))
+			printf "${charge_icon_val}"
+            # printf "$charge_40s_icon_default"
+        elif [ "$percentage" == "" ];then
             printf "$full_charge_icon_default"  # assume it's a desktop
         else
+			generate_charge_icon $((percentage/10))
             printf "$low_charge_icon"
+			printf "${charge_icon_val}"
         fi
 	elif [[ $status =~ (attached) ]]; then
 		printf "$attached_icon"
