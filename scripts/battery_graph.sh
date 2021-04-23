@@ -48,8 +48,12 @@ print_graph() {
 		printf "$charged_icon"
 	elif [[ $status =~ (^charging) ]]; then
 		printf "$charging_icon"
+	elif [[ $status =~ (^discharging) ]]; then
+		printf ""
 	elif [[ $status =~ (attached) ]]; then
 		printf "$attached_icon"
+	else
+		return;
 	fi
 
 	charge_icon_param=$((${graph_param}/10))
