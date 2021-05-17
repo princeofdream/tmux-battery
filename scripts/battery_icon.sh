@@ -85,7 +85,7 @@ print_icon() {
 		printf "${charge_icon_val}"
 	elif [[ $status =~ (^charging) ]]; then
 		generate_charge_icon $((percentage/10))
-		printf "$charging_icon"
+		printf "#[fg=#eeee00]$charging_icon"
 		printf "${charge_icon_val}"
 	elif [[ $status =~ (^discharging) ]]; then
         # use code from the bg color
