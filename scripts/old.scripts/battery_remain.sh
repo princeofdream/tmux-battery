@@ -72,7 +72,7 @@ print_battery_remain() {
 }
 
 print_battery_full() {
-	if !$short; then
+	if ! $short; then
 		return
 	fi
 
