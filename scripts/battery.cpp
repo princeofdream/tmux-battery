@@ -24,17 +24,21 @@
 #include <iostream>
 
 uint32_t color_map[] = {
+    // 0xd70000, 0xff5f00, 0xff8700, 0xffaf00, 0xffd700,
+    // 0xffff00, 0xd7ff00, 0xafff00, 0x87ff00, 0x5fff00,
     0xd70000, 0xff5f00, 0xff8700, 0xffaf00, 0xffd700,
-    0xffff00, 0xd7ff00, 0xafff00, 0x87ff00, 0x5fff00,
+    0xffff00, 0xd7ff00, 0xafff00, 0x87ff00, 0x98c379,
     // 0x5fff00, 0x87ff00, 0xafff00, 0xd7ff00, 0xffff00,
     // 0xffd700, 0xffaf00, 0xff8700, 0xff5f00, 0xd70000,
 };
 
+const char *tmpval = "︴※ ∝ ₰ э § ö ©";
 const char *charged_icon  = "❇";
 // const char *charged_icon  = "※";
 // const char *charging_icon = "ϟ";
 // const char *charging_icon = "√";
 const char *charging_icon = "∝";
+const char *notCharge_icon = "§";
 const char *attached_icon = "|!!|";
 
 void read_battery_info(const char *battery_dir) {
@@ -80,6 +84,9 @@ void read_battery_info(const char *battery_dir) {
         }
         else if (strncasecmp("Attached", value, strlen("Attached")) == 0) {
             sprintf(outVal, "#[fg=#d70000]%s", attached_icon);
+        }
+        else if (strncasecmp("Not Charging", value, strlen("Not Charging")) == 0) {
+            sprintf(outVal, "#[fg=#61afef]%s", notCharge_icon);
         }
     }
 

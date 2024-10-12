@@ -22,7 +22,7 @@ do_interpolation() {
 	for ((i=0; i<${#battery_commands[@]}; i++)); do
 		all_interpolated=${all_interpolated//${battery_interpolation[$i]}/${battery_commands[$i]}}
 	done
-	echo "$all_interpolated"
+	echo "${all_interpolated}"
 }
 
 update_tmux_option() {
