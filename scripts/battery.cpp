@@ -32,6 +32,8 @@ uint32_t color_map[] = {
     // 0xffd700, 0xffaf00, 0xff8700, 0xff5f00, 0xd70000,
 };
 
+std::string bat_val[] = { "▁","▂", "▃", "▄", "▅", "▆", "▇", "█", "🂡", "🂠"};
+
 const char *tmpval = "︴※ ∝ ₰ э § ö ©";
 const char *charged_icon  = "❇";
 // const char *charged_icon  = "※";
@@ -101,6 +103,7 @@ void read_battery_info(const char *battery_dir) {
         sprintf(outVal, "%s#", outVal);
     }
     sprintf(outVal, "%s[fg=#%x]", outVal, color_map[batVal/10]);
+#if 0
     if (batVal <= 20) {
         sprintf(outVal, "%s%s", outVal, "▁");
     }
@@ -116,6 +119,13 @@ void read_battery_info(const char *battery_dir) {
     else {
         sprintf(outVal, "%s%s", outVal, "▇");
     }
+#else
+    if (batVal/10 == 0) {
+        sprintf(outVal, "%s%s", outVal, bat_val[batVal/10-1].c_str());
+    } else {
+        sprintf(outVal, "%s%s ", outVal, bat_val[batVal/10-1].c_str());
+    }
+#endif
     sprintf(outVal, "%s%2d", outVal, batVal);
 
     printf("%s", outVal);
