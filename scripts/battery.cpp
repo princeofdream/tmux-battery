@@ -27,7 +27,7 @@ uint32_t color_map[] = {
     // 0xd70000, 0xff5f00, 0xff8700, 0xffaf00, 0xffd700,
     // 0xffff00, 0xd7ff00, 0xafff00, 0x87ff00, 0x5fff00,
     0xd70000, 0xff5f00, 0xff8700, 0xffaf00, 0xffd700,
-    0xffff00, 0xd7ff00, 0xafff00, 0x87ff00, 0x98c379,
+    0xffff00, 0xd7ff00, 0xafff00, 0x87ff00, 0x98c379, 0x98c379,
     // 0x5fff00, 0x87ff00, 0xafff00, 0xd7ff00, 0xffff00,
     // 0xffd700, 0xffaf00, 0xff8700, 0xff5f00, 0xd70000,
 };
@@ -77,7 +77,7 @@ void read_battery_info(const char *battery_dir) {
         if (strncasecmp("Discharging", value, strlen("Discharging")) == 0) {
         }
         else if (strncasecmp("Charged", value, strlen("Charged")) == 0) {
-            sprintf(outVal, "#[fg=#5fff00]%s", charged_icon);
+            sprintf(outVal, "#[fg=#98c379]%s", charged_icon);
         }
         else if (strncasecmp("Charging", value, strlen("Charging")) == 0) {
             sprintf(outVal, "#[fg=#d7ff00]%s", charging_icon);
@@ -87,6 +87,11 @@ void read_battery_info(const char *battery_dir) {
         }
         else if (strncasecmp("Not Charging", value, strlen("Not Charging")) == 0) {
             sprintf(outVal, "#[fg=#61afef]%s", notCharge_icon);
+        }
+        else if (strncasecmp("Full", value, strlen("Full")) == 0) {
+            sprintf(outVal, "#[fg=#98c379]%s", charged_icon);
+        } else {
+            sprintf(outVal, "#[fg=#d7ff00]%s", "x");
         }
     }
 
